@@ -8,8 +8,8 @@ You know, for Query - java edition
     usage: elseql [--host=host:port] [--csv|--json|--xml|--native] "query"
 
 where:
-    --host: ES server name and port (default localhost:9200)
 
+    --host: ES server name and port (default localhost:9200)
     --csv: format results as CSV (one line per record, comma separated fields)
     --json: format results as JSON (array of JSON objects)
     --xml: format results as XML (list of items)
@@ -19,10 +19,11 @@ where:
 * By default elseql will try to connect to localhost:9200
 * host and port can be specified on the command line using the "--host" option (see USAGE)
 * host and port can also be specified via the environment variable ELSEQL_HOST
-* If the ElasticSearch server is behind a firewall (or listening only for localhost connections) but the machine is running an SSH daemon, elseql also accept "tunnel" connections (it will tunnel ES HTTP requests over SSH) by specifying the host URL as 'tunnel:user:password@remotehost:remoteport'
-** This will create a tunnell from localhost:remoteport to remotehost:remoteport using the appropriate credentials
-** For now only password authentication is supported
-** For simplification currently you cannot specify a local port different than the remote port
+
+* If the ElasticSearch server is behind a firewall (or listening only for localhost connections) but the machine is running an SSH daemon, elseql also accept "tunnel" connections (it will tunnel ES HTTP requests over SSH) by specifying the host URL as 'tunnel:user:password@remotehost:remoteport'.
+This will create a tunnell from localhost:remoteport to remotehost:remoteport using the appropriate credentials.
+For now only password authentication is supported.
+For simplification currently you cannot specify a local port different than the remote port
 
 ### QUERY
 
