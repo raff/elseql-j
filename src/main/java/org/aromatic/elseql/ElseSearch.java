@@ -193,12 +193,10 @@ public class ElseSearch
 
     public static void usage(String error) {
 
-	if (error != null) {
+	if (error != null)
 	    System.out.println(error);
-	    System.out.println();
-	}
 
-        System.out.println("usage: elseql [--host=host:port] [--csv|--json|--xml] \"query\"");
+        System.out.println("usage: elseql [--host=host:port] [--csv|--json|--xml|--native] \"query\"");
 	System.exit(error==null ? 0 : 1);
     }
 
@@ -248,7 +246,8 @@ public class ElseSearch
 	    }
 
 	    else {
-		usage("invalid option: " + args[argc]);
+                String message = args[argc].equals("--help") ? null : "invalid option: " + args[argc];
+		usage(message);
 	    }
 	}
 
