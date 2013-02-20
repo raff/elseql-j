@@ -19,7 +19,7 @@ public class ElseParser
     private enum Keyword {
         SELECT,
         FACETS,
-	SCRIPT,
+        SCRIPT,
         FROM,
         WHERE,
         FILTER,
@@ -28,23 +28,23 @@ public class ElseParser
         ORDER,
         BY,
         LIMIT,
-	ASC,
-	DESC,
-	AND,
-	OR,
-	NOT,
-	IN,
-	BETWEEN
-	;
+        ASC,
+        DESC,
+        AND,
+        OR,
+        NOT,
+        IN,
+        BETWEEN
+        ;
 
-	private String token = null;
+        private String token = null;
 
-	private Keyword() {
-	}
+        private Keyword() {
+        }
 
-	private Keyword(String token) {
-	    this.token = token;
-	}
+        private Keyword(String token) {
+            this.token = token;
+        }
     };
 
         /*
@@ -53,13 +53,13 @@ public class ElseParser
     public static class Query {
         public List<String> selectList = null;
         public List<String> facetList = null;
-	public Util.NameValue script = null;
+        public Util.NameValue script = null;
         public String index = null;
         public Expression whereExpr = null;
         public Expression filterExpr = null;
         public List<Util.NameValue> orderList = null;
         public int from = 0;
-	public int size = 10;
+        public int size = 10;
 
         public String toQueryString(Expression expr) {
             if (expr == null)
@@ -77,24 +77,24 @@ public class ElseParser
                 + "\nfilter " + toQueryString(filterExpr)
                 + "\norder " + orderList
                 + "\nfrom " + from
-		+ "\nsize " + size
-		;
+                + "\nsize " + size
+                ;
         }
     }
 
     private enum Operator {
-    	STRING_EXPR,
-    	EXISTS_EXPR,
-    	MISSING_EXPR,
-	AND,
-	OR,
-	NOT,
-	EQ,
-	NE,
-	LT,
-	LTE,
-	GT,
-	GTE
+            STRING_EXPR,
+            EXISTS_EXPR,
+            MISSING_EXPR,
+        AND,
+        OR,
+        NOT,
+        EQ,
+        NE,
+        LT,
+        LTE,
+        GT,
+        GTE
     }
 
     public static class Expression {
@@ -159,13 +159,13 @@ public class ElseParser
             return this.toString();
         }
 
-	public boolean isExistsExpression() {
-	    return op == Operator.EXISTS_EXPR;
-	}
+        public boolean isExistsExpression() {
+            return op == Operator.EXISTS_EXPR;
+        }
 
-	public boolean isMissingExpression() {
-	    return op == Operator.MISSING_EXPR;
-	}
+        public boolean isMissingExpression() {
+            return op == Operator.MISSING_EXPR;
+        }
 
         public String join(String sep) {
             Expression expr = (Expression) this.operands.get(0);
@@ -186,9 +186,9 @@ public class ElseParser
             return this;
         }
 
-	public Object getOperand() {
-	    return this.operands.get(0);
-	}
+        public Object getOperand() {
+            return this.operands.get(0);
+        }
 
         static Expression singleOperand(Operator op, Object expr) {
             return new Expression(op).addOperand(expr);
@@ -216,14 +216,14 @@ public class ElseParser
 
     private static final Set<Keyword> ORDERKEYS = new HashSet<Keyword>();
     static {
-    	ORDERKEYS.add(Keyword.ASC);
-    	ORDERKEYS.add(Keyword.DESC);
+            ORDERKEYS.add(Keyword.ASC);
+            ORDERKEYS.add(Keyword.DESC);
     }
 
     private static final Set<Operator> BOOLEANS = new HashSet<Operator>();
     static {
-    	BOOLEANS.add(Operator.AND);
-    	BOOLEANS.add(Operator.OR);
+            BOOLEANS.add(Operator.AND);
+            BOOLEANS.add(Operator.OR);
     }
 
     private final String m_queryString;
@@ -295,42 +295,42 @@ public class ElseParser
     private Keyword parseKeywords(Set<Keyword> kset, Keyword kdefault) throws Exception {
 
         int token = m_tokenizer.nextToken();
-	Keyword k = null;
+        Keyword k = null;
 
-	if (token == StreamTokenizer.TT_WORD) {
+        if (token == StreamTokenizer.TT_WORD) {
 
-	    try {
-		k = Keyword.valueOf(m_tokenizer.sval.toUpperCase());
-	    } catch(IllegalArgumentException e) {
-	    }
-	}
+            try {
+                k = Keyword.valueOf(m_tokenizer.sval.toUpperCase());
+            } catch(IllegalArgumentException e) {
+            }
+        }
 
-	if (k != null && kset.contains(k))
-	    return k;
+        if (k != null && kset.contains(k))
+            return k;
 
-	m_tokenizer.pushBack();
-	return kdefault;
+        m_tokenizer.pushBack();
+        return kdefault;
     }
 
     private Operator parseOperators(Set<Operator> oset, Operator odefault) throws Exception {
 
         int token = m_tokenizer.nextToken();
-	Operator op = null;
+        Operator op = null;
 
-	if (token == StreamTokenizer.TT_WORD) {
+        if (token == StreamTokenizer.TT_WORD) {
 
-	    try {
-		op = Operator.valueOf(m_tokenizer.sval.toUpperCase());
-	    } catch(IllegalArgumentException e) {
+            try {
+                op = Operator.valueOf(m_tokenizer.sval.toUpperCase());
+            } catch(IllegalArgumentException e) {
                 ; // nothing to do
-	    }
-	}
+            }
+        }
 
-	if (op != null && oset.contains(op))
-	    return op;
+        if (op != null && oset.contains(op))
+            return op;
 
-	m_tokenizer.pushBack();
-	return odefault;
+        m_tokenizer.pushBack();
+        return odefault;
     }
 
     /*
@@ -344,7 +344,7 @@ public class ElseParser
         case StreamTokenizer.TT_EOL:
             return new ElseParser.ParseException("Expected " + expected + ", got EOL");
 
-	case StreamTokenizer.TT_NUMBER:
+        case StreamTokenizer.TT_NUMBER:
             return new ElseParser.ParseException("Expected " + expected + ", got number " + m_tokenizer.sval);
 
         default:
@@ -356,26 +356,26 @@ public class ElseParser
      * Parse ID
      */
     private String parseId() throws Exception {
-	int token = m_tokenizer.nextToken();
-	if (token == StreamTokenizer.TT_WORD) {
-	    String word = m_tokenizer.sval;
+        int token = m_tokenizer.nextToken();
+        if (token == StreamTokenizer.TT_WORD) {
+            String word = m_tokenizer.sval;
 
             if (DEBUG)
                 System.out.println("got " + word);
 
-	    if (!KEYWORDS.containsKey(word.toUpperCase()))
-	    	return word;
-	}
+            if (!KEYWORDS.containsKey(word.toUpperCase()))
+                    return word;
+        }
 
-	m_tokenizer.pushBack();
-	return null;
+        m_tokenizer.pushBack();
+        return null;
     }
 
     /*
      * Parse IDENTIFIER ( id.id... )
      */
     private String parseIdentifier() throws Exception {
-    	return parseIdentifier(false).name;
+            return parseIdentifier(false).name;
     }
 
     /*
@@ -383,48 +383,48 @@ public class ElseParser
      */
     private Util.NameValue parseIdentifier(boolean sortorder) throws Exception {
         StringBuilder sb = new StringBuilder();
-	Keyword order = null;
+        Keyword order = null;
         int state = 0; // 0: id, 1: sep, 2: sort
 
         for (;;) {
-	    //
-	    // expecting ID
-	    //
+            //
+            // expecting ID
+            //
             if (state == 0) {
-	    	String word = parseId();
-		if (word != null) {
-		    sb.append(word);
-		    state = 1;
-		}
-	    }
+                    String word = parseId();
+                if (word != null) {
+                    sb.append(word);
+                    state = 1;
+                }
+            }
 
-	    //
-	    // expecting SEPARATOR
-	    //
-	    if (state == 1) {
-	        if (parseToken(ID_SEPARATOR, true)) {
-		    sb.append(ID_SEPARATOR);
-		    state = 0;
-		    continue;
-		}
+            //
+            // expecting SEPARATOR
+            //
+            if (state == 1) {
+                if (parseToken(ID_SEPARATOR, true)) {
+                    sb.append(ID_SEPARATOR);
+                    state = 0;
+                    continue;
+                }
 
-		if (sortorder)
-		    state = 2;
-	    }
+                if (sortorder)
+                    state = 2;
+            }
 
-	    //
-	    // expect sortorder
-	    //
-	    if (state == 2)
-	        order = parseKeywords(ORDERKEYS, Keyword.ASC);
+            //
+            // expect sortorder
+            //
+            if (state == 2)
+                order = parseKeywords(ORDERKEYS, Keyword.ASC);
 
-	    break;
+            break;
         }
 
-	if (sb.length() > 0)
-	    return new Util.NameValue(sb.toString(), order==null ? null : order.toString().toLowerCase());
+        if (sb.length() > 0)
+            return new Util.NameValue(sb.toString(), order==null ? null : order.toString().toLowerCase());
 
-	throw parseError("identifier");
+        throw parseError("identifier");
     }
 
     /*
@@ -494,7 +494,7 @@ public class ElseParser
                 ; // follow through
             }
 
-	throw parseError("integer");
+        throw parseError("integer");
     }
 
     /*
@@ -505,7 +505,7 @@ public class ElseParser
         if (token == '"' || token == '\'')
             return m_tokenizer.sval;
 
-	throw parseError("quoted string");
+        throw parseError("quoted string");
     }
 
     private String parseOptionalString() throws Exception {
@@ -513,7 +513,7 @@ public class ElseParser
         if (token == '"' || token == '\'')
             return m_tokenizer.sval;
 
-	m_tokenizer.pushBack();
+        m_tokenizer.pushBack();
         return null;
     }
 
@@ -670,33 +670,33 @@ public class ElseParser
 
     private Expression parseFilter() throws Exception {
         if (parseKeyword(Keyword.EXIST, true)) {
-	    String field = parseIdentifier();
-	    return Expression.singleOperand(Operator.EXISTS_EXPR, field);
-	}
+            String field = parseIdentifier();
+            return Expression.singleOperand(Operator.EXISTS_EXPR, field);
+        }
 
-	else if (parseKeyword(Keyword.MISSING, true)) {
-	    String field = parseIdentifier();
-	    return Expression.singleOperand(Operator.MISSING_EXPR, field);
-	}
+        else if (parseKeyword(Keyword.MISSING, true)) {
+            String field = parseIdentifier();
+            return Expression.singleOperand(Operator.MISSING_EXPR, field);
+        }
 
-	else
-	    return parseExpression();
+        else
+            return parseExpression();
     }
 
-	/*
-	 * parse scriptId = "script expression"
-	 */
+        /*
+         * parse scriptId = "script expression"
+         */
     private Util.NameValue parseScript() throws Exception {
 
-    	String id = parseId();
+        String id = parseId();
 
-	Operator op = parseOperator();
+        Operator op = parseOperator();
         if (op != Operator.EQ)
             throw new ElseParser.ParseException("Expected '=', got " + op);
 
-	String script = parseString();
+        String script = parseString();
 
-	return new Util.NameValue(id, script);
+        return new Util.NameValue(id, script);
     }
 
     /*
@@ -718,8 +718,8 @@ public class ElseParser
         if (parseKeyword(Keyword.FACETS, true))
             m_query.facetList = parseIdentifiers();
 
-	if (parseKeyword(Keyword.SCRIPT, true))
-	    m_query.script = parseScript();
+        if (parseKeyword(Keyword.SCRIPT, true))
+            m_query.script = parseScript();
 
         parseKeyword(Keyword.FROM);
         m_query.index = parseIdentifier();
@@ -735,17 +735,17 @@ public class ElseParser
             m_query.orderList = parseOrderIdentifiers();
         }
 
-	if (parseKeyword(Keyword.LIMIT, true)) {
-	    int v = parseInteger();
+        if (parseKeyword(Keyword.LIMIT, true)) {
+            int v = parseInteger();
 
-	    if (parseToken(LIST_SEPARATOR, true)) {
-	    	m_query.from = (int) v;
+            if (parseToken(LIST_SEPARATOR, true)) {
+                    m_query.from = (int) v;
 
-	        v = parseInteger();
-	    }
+                v = parseInteger();
+            }
 
-	    m_query.size = (int) v;
-	}
+            m_query.size = (int) v;
+        }
 
         parseEnd();
     }

@@ -44,10 +44,10 @@ public class Util
             jele = source;
         }
 
-	public String toPrettyString() {
-	    Gson gson = new GsonBuilder().setPrettyPrinting().create();
-	    return gson.toJson(jele);
-	}
+        public String toPrettyString() {
+            Gson gson = new GsonBuilder().setPrettyPrinting().create();
+            return gson.toJson(jele);
+        }
 
         public String toString() {
             return jele.toString();
@@ -58,30 +58,30 @@ public class Util
         }
 
         public String toXML(int index) {
-	    return "<item index=\"" + index + "\">"
-	    	+ elementToXML(jele)
-		+ "</item>";
+            return "<item index=\"" + index + "\">"
+                + elementToXML(jele)
+                + "</item>";
         }
 
         public static String elementToXML(JsonElement jele) {
-	    //
-	    // null are empty values
-	    //
-	    if (jele==null || jele.isJsonNull())
-		return "";
-	    
-	    if (jele.isJsonPrimitive()) {
+            //
+            // null are empty values
+            //
+            if (jele==null || jele.isJsonNull())
+                return "";
+            
+            if (jele.isJsonPrimitive()) {
                 JsonPrimitive p = jele.getAsJsonPrimitive();
 
-	    	if (p.isString())
-		    return p.getAsString().replace("&", "&amp;").replace("<", "&gt;");
+                if (p.isString())
+                    return p.getAsString().replace("&", "&amp;").replace("<", "&gt;");
 
-		//
-		// other primitives are returned as-is
-		//
-		else
+                //
+                // other primitives are returned as-is
+                //
+                else
                     return p.toString();
-	    }
+            }
 
             StringBuilder sb = new StringBuilder();
 
@@ -122,42 +122,42 @@ public class Util
             return sb.toString();
         }
 
-	public String toCSV() {
-	    //
-	    // null are empty values
-	    //
-	    if (jele==null || jele.isJsonNull())
-		return "";
-	    
-	    if (jele.isJsonPrimitive()) {
-	        //
-		// strings are CSV-escaped
-		//
-	    	if (jele.getAsJsonPrimitive().isString())
-		    return "\"" + jele.getAsJsonPrimitive().getAsString().replace("\"", "\"\"") + "\"";
+        public String toCSV() {
+            //
+            // null are empty values
+            //
+            if (jele==null || jele.isJsonNull())
+                return "";
+            
+            if (jele.isJsonPrimitive()) {
+                //
+                // strings are CSV-escaped
+                //
+                    if (jele.getAsJsonPrimitive().isString())
+                    return "\"" + jele.getAsJsonPrimitive().getAsString().replace("\"", "\"\"") + "\"";
 
 
-		//
-		// other primitives are returned as-id
-		//
-		else
-			return jele.toString();
-	    }
+                //
+                // other primitives are returned as-id
+                //
+                else
+                    return jele.toString();
+            }
 
-	    //
-	    // non-primitives are fully CSV-escaped so they can be converted back to json blobs
-	    //
-	    return "\"" + jele.toString().replace("\"", "\"\"") + "\"";
-	}
+            //
+            // non-primitives are fully CSV-escaped so they can be converted back to json blobs
+            //
+            return "\"" + jele.toString().replace("\"", "\"\"") + "\"";
+        }
 
-	public String toCSV(String field_names[]) {
-	    ArrayList<String> values = new ArrayList<String>(field_names.length);
+        public String toCSV(String field_names[]) {
+            ArrayList<String> values = new ArrayList<String>(field_names.length);
 
-	    for (String name : field_names)
-		values.add(this.get(name).toCSV());
+            for (String name : field_names)
+                values.add(this.get(name).toCSV());
 
-	    return join(",", values);
-	}
+            return join(",", values);
+        }
 
         public Json putNVList(String name, List<NameValue> value) {
             JsonArray jarray = new JsonArray();
@@ -305,8 +305,8 @@ public class Util
 
         connection.setRequestMethod(method);
 
-	if (DEBUG)
-	    System.out.println("DEBUG request " + connection);
+        if (DEBUG)
+            System.out.println("DEBUG request " + connection);
 
         if (data != null) {
             connection.setDoOutput(true);
@@ -316,13 +316,13 @@ public class Util
             writer.close();
         }
 
-	if (DEBUG)
-	    System.out.println("DEBUG connecting...");
+        if (DEBUG)
+            System.out.println("DEBUG connecting...");
 
         connection.connect();
         int responseCode = connection.getResponseCode();
 
-	if (DEBUG)
+        if (DEBUG)
             System.out.println("DEBUG response " + connection);
 
         if (responseCode == 200)
@@ -351,25 +351,25 @@ public class Util
             Reader reader = http_get(url, data);
             return new Json(parser.parse(reader).getAsJsonObject());
         } catch(HttpError error) {
-	    if (DEBUG) {
+            if (DEBUG) {
                 System.out.println("ERROR code " + error.code);
                 System.out.println("ERROR contentType " + error.contentType);
                 System.out.println("ERROR body " + error.body);
-	    }
+            }
 
             if (error.contentType != null && error.contentType.contains("json") && error.body != null)
                 return new Json(parser.parse(error.body).getAsJsonObject());
 
             throw error;
-	}
+        }
     }
 
     public static String join(String sep, Collection<String> args) {
-    	return join(sep, args.toArray(new String[0]), 0);
+            return join(sep, args.toArray(new String[0]), 0);
     }
 
     public static String join(String sep, String args[]) {
-    	return join(sep, args, 0);
+            return join(sep, args, 0);
     }
 
     public static String join(String sep, String args[], int start) {
@@ -388,35 +388,35 @@ public class Util
     }
 
     public enum Format {
-    	NATIVE, CSV, JSON, XML
+        NATIVE, CSV, JSON, XML
     }
 
     public static String startList(Format format) {
-    	switch(format)
-	{
-	case XML:
-	    return "<list>";
+        switch(format)
+        {
+        case XML:
+            return "<list>";
 
-	case JSON:
-	    return "[";
+        case JSON:
+            return "[";
 
-	default:
-	    return null;
-	}
+        default:
+            return null;
+        }
     }
 
     public static String endList(Format format) {
-    	switch(format)
-	{
-	case XML:
-	    return "</list>";
+        switch(format)
+        {
+        case XML:
+            return "</list>";
 
-	case JSON:
-	    return "]";
+        case JSON:
+            return "]";
 
-	default:
-	    return null;
-	}
+        default:
+            return null;
+        }
     }
 
         /*
